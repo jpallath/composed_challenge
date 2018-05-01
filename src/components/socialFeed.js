@@ -142,7 +142,11 @@ class SocialFeed extends Component {
             </div>
           </div>
         </div>
-        <div id="end" onScroll={this.handleBottomScroll}>
+        <div
+          id="end"
+          onScroll={this.handleBottomScroll}
+          onClick={this.handleBottomScroll}
+        >
           <i className="fas fa-cog" />
         </div>
       </div>
