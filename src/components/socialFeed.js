@@ -9,6 +9,7 @@ class SocialFeed extends Component {
     super(props);
     this.state = {
       posts: [],
+      currentPost: 0,
       detail: "",
       detailStatus: "",
       lightboxStatus: "invisble",
@@ -19,10 +20,13 @@ class SocialFeed extends Component {
     this.closeBox = this.closeBox.bind(this);
     this.handleBottomScroll = this.handleBottomScroll.bind(this);
     this.isScrolledIntoView = this.isScrolledIntoView.bind(this);
+    this.leftPost = this.leftPost.bind(this);
+    this.rightPost = this.rightPost.bind(this);
   }
 
   showBox(postItem) {
-    console.log(postItem);
+    console.log(this.state.posts);
+    let currentPost = this.state.posts.indexOf(postItem);
     let detail = postItem.mainImage.url
       ? postItem.mainImage.url
       : postItem.caption;
@@ -30,7 +34,8 @@ class SocialFeed extends Component {
     this.setState({
       lightboxStatus: "visible",
       detail: detail,
-      detailStatus: detailStatus
+      detailStatus: detailStatus,
+      currentPost: currentPost
     });
   }
 
@@ -68,6 +73,41 @@ class SocialFeed extends Component {
     var isVisible = elemTop >= 0 && elemBottom <= window.innerHeight;
     return isVisible;
   }
+
+  leftPost = () => {
+    let postValue = this.state.currentPost - 1;
+    if (postValue === -1) {
+      postValue = this.state.posts.length - 1;
+    }
+    console.log(postValue);
+    let newPost = this.state.posts[postValue];
+    let detail = newPost.mainImage.url
+      ? newPost.mainImage.url
+      : newPost.caption;
+    let detailStatus = newPost.mainImage.url ? "image" : "text";
+    this.setState({
+      detail: detail,
+      detailStatus: detailStatus,
+      currentPost: postValue
+    });
+  };
+
+  rightPost = () => {
+    let postValue = this.state.currentPost + 1;
+    if (postValue === this.state.posts.length) {
+      postValue = 0;
+    }
+    let newPost = this.state.posts[postValue];
+    let detail = newPost.mainImage.url
+      ? newPost.mainImage.url
+      : newPost.caption;
+    let detailStatus = newPost.mainImage.url ? "image" : "text";
+    this.setState({
+      detail: detail,
+      detailStatus: detailStatus,
+      currentPost: postValue
+    });
+  };
   render() {
     let { posts, detail, detailStatus, lightboxStatus } = this.state;
     let allPosts = posts.map(post => (
@@ -80,17 +120,26 @@ class SocialFeed extends Component {
           className={
             lightboxStatus === "invisble" ? "lightbox" : "lightbox active"
           }
-          onClick={this.closeBox}
         >
           <div className="container">
             <button className="close-button" onClick={this.closeBox}>
               X
             </button>
-            {detailStatus === "image" ? (
-              <img src={detail} alt="tepid" />
-            ) : (
-              <div className="texted-detail">{detail}</div>
-            )}
+            <div className="user-activity">
+              <button className="adjacent-post" onClick={this.leftPost}>
+                {" "}
+                <i className="fas fa-arrow-left" />{" "}
+              </button>
+              {detailStatus === "image" ? (
+                <img src={detail} alt="tepid" />
+              ) : (
+                <div className="texted-detail">{detail}</div>
+              )}
+              <button className="adjacent-post" onClick={this.rightPost}>
+                {" "}
+                <i className="fas fa-arrow-right" />{" "}
+              </button>
+            </div>
           </div>
         </div>
         <div id="end" onScroll={this.handleBottomScroll}>

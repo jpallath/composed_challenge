@@ -3,7 +3,7 @@
   position: relative;
   opacity: 0;
   animation: grayed 3s forwards;
-  width: 16vw;
+  width: auto;
 }
 .content {
   display: flex;
@@ -45,9 +45,6 @@
 }
 
 @media screen and (max-width: 414px) {
-  .post-item {
-    width: auto;
-  }
   .content.caption {
     background-color: pink;
     width: 100px;
