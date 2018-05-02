@@ -21,18 +21,25 @@ class SocialFeed extends Component {
     this.handleBottomScroll = this.handleBottomScroll.bind(this);
     this.isScrolledIntoView = this.isScrolledIntoView.bind(this);
     this.changePost = this.changePost.bind(this);
-  }
-
-  closeBox() {
-    this.setState({
-      lightboxStatus: "invisble"
-    });
+    this.handleEvent = this.handleEvent.bind(this);
   }
 
   componentDidMount() {
     this.Posts();
     window.addEventListener("scroll", this.handleBottomScroll, false);
     window.addEventListener("keydown", this.handleEvent, false);
+  }
+
+  handleEvent(event) {
+    if (event.code === "ArrowLeft") {
+      this.changePost("left");
+    }
+    if (event.code === "ArrowRight") {
+      this.changePost("right");
+    }
+    if (event.code === "Escape") {
+      this.closeBox();
+    }
   }
 
   Posts() {
@@ -65,6 +72,12 @@ class SocialFeed extends Component {
       : postItem.caption;
     let detailStatus = postItem.mainImage.url ? "image" : "text";
     this.changeDetails(detail, detailStatus, currentPost);
+  }
+
+  closeBox() {
+    this.setState({
+      lightboxStatus: "invisble"
+    });
   }
 
   changePost = direction => {
@@ -103,7 +116,7 @@ class SocialFeed extends Component {
       <PostItem key={post.id} {...post} onClick={() => this.showBox(post)} />
     ));
     return (
-      <div id="social" className="social-feed">
+      <div id="social" className="social-feed" onKeyDown={this.handleEvent}>
         {allPosts}
         <div
           className={
