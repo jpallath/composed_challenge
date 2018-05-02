@@ -16,6 +16,9 @@
     align-items: center;
     justify-content: center;
   }
+  .lightbox.active .img {
+    max-height: 210px;
+  }
 }
 
 .lightbox {
@@ -46,8 +49,7 @@
 }
 .lightbox.active img {
   width: auto;
-  height: 50vh;
-  max-height: 210px;
+  height: 80vh;
 }
 .user-activity {
   display: flex;
