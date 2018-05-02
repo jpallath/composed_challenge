@@ -20,23 +20,7 @@ class SocialFeed extends Component {
     this.closeBox = this.closeBox.bind(this);
     this.handleBottomScroll = this.handleBottomScroll.bind(this);
     this.isScrolledIntoView = this.isScrolledIntoView.bind(this);
-    this.leftPost = this.leftPost.bind(this);
-    this.rightPost = this.rightPost.bind(this);
-  }
-
-  showBox(postItem) {
-    console.log(this.state.posts);
-    let currentPost = this.state.posts.indexOf(postItem);
-    let detail = postItem.mainImage.url
-      ? postItem.mainImage.url
-      : postItem.caption;
-    let detailStatus = postItem.mainImage.url ? "image" : "text";
-    this.setState({
-      lightboxStatus: "visible",
-      detail: detail,
-      detailStatus: detailStatus,
-      currentPost: currentPost
-    });
+    this.changePost = this.changePost.bind(this);
   }
 
   closeBox() {
@@ -48,13 +32,13 @@ class SocialFeed extends Component {
   componentDidMount() {
     this.Posts();
     window.addEventListener("scroll", this.handleBottomScroll, false);
+    window.addEventListener("keydown", this.handleEvent, false);
   }
 
   Posts() {
     axios.get(this.state.apicaller).then(res => {
       let posts = this.state.posts.concat(res.data.data);
       const apicaller = res.data.links.next;
-      // console.log(this.state.apicaller);
       this.setState({ posts: posts, apicaller: apicaller });
     });
   }
@@ -74,40 +58,45 @@ class SocialFeed extends Component {
     return isVisible;
   }
 
-  leftPost = () => {
-    let postValue = this.state.currentPost - 1;
-    if (postValue === -1) {
-      postValue = this.state.posts.length - 1;
+  showBox(postItem) {
+    let currentPost = this.state.posts.indexOf(postItem);
+    let detail = postItem.mainImage.url
+      ? postItem.mainImage.url
+      : postItem.caption;
+    let detailStatus = postItem.mainImage.url ? "image" : "text";
+    this.changeDetails(detail, detailStatus, currentPost);
+  }
+
+  changePost = direction => {
+    let postValue = this.state.currentPost;
+    if (direction === "right") {
+      postValue++;
+      if (postValue === this.state.posts.length) {
+        postValue = 0;
+      }
+    } else if (direction === "left") {
+      postValue--;
+      if (postValue === -1) {
+        postValue = this.state.posts.length - 1;
+      }
     }
-    console.log(postValue);
     let newPost = this.state.posts[postValue];
     let detail = newPost.mainImage.url
       ? newPost.mainImage.url
       : newPost.caption;
     let detailStatus = newPost.mainImage.url ? "image" : "text";
+    this.changeDetails(detail, detailStatus, postValue);
+  };
+
+  changeDetails = (detail, detailStatus, currentPost) => {
     this.setState({
+      lightboxStatus: "visible",
       detail: detail,
       detailStatus: detailStatus,
-      currentPost: postValue
+      currentPost: currentPost
     });
   };
 
-  rightPost = () => {
-    let postValue = this.state.currentPost + 1;
-    if (postValue === this.state.posts.length) {
-      postValue = 0;
-    }
-    let newPost = this.state.posts[postValue];
-    let detail = newPost.mainImage.url
-      ? newPost.mainImage.url
-      : newPost.caption;
-    let detailStatus = newPost.mainImage.url ? "image" : "text";
-    this.setState({
-      detail: detail,
-      detailStatus: detailStatus,
-      currentPost: postValue
-    });
-  };
   render() {
     let { posts, detail, detailStatus, lightboxStatus } = this.state;
     let allPosts = posts.map(post => (
@@ -126,7 +115,10 @@ class SocialFeed extends Component {
               X
             </button>
             <div className="user-activity">
-              <button className="adjacent-post" onClick={this.leftPost}>
+              <button
+                className="adjacent-post"
+                onClick={this.changePost.bind(this, "left")}
+              >
                 {" "}
                 <i className="fas fa-arrow-left" />{" "}
               </button>
@@ -135,7 +127,11 @@ class SocialFeed extends Component {
               ) : (
                 <div className="texted-detail">{detail}</div>
               )}
-              <button className="adjacent-post" onClick={this.rightPost}>
+              <button
+                className="adjacent-post"
+                value="right"
+                onClick={this.changePost.bind(this, "right")}
+              >
                 {" "}
                 <i className="fas fa-arrow-right" />{" "}
               </button>
