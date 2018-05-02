@@ -26,6 +26,8 @@ There's one bug and that's if the gear is viewable at load.  This happens when t
 
 I also used the Lodash library's Debounce function so that the Posts function doesn't fire 10 times in a span of a second.  If this wasn't debounced, a user would see multiple copies of the same entry.
 
+Note: I played around with the idea of having an invisible function over the rotating cog, but in the end chose the cog.  I talked to a friend about it and he said that an invisble tracker felt "hacky," so I slid with the curve and decided to be upfront about my function with the gear/pixel present.
+
 ### Lightbox
 
 There is a showbox function that runs when a user clicks an entry in the feed.  I have a conditional in the render that is triggered between active and invisible when the lightbox is activated or closed.  
