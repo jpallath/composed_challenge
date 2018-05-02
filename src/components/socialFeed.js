@@ -128,26 +128,28 @@ class SocialFeed extends Component {
               X
             </button>
             <div className="user-activity">
-              <button
-                className="adjacent-post"
-                onClick={this.changePost.bind(this, "left")}
-              >
-                {" "}
-                <i className="fas fa-arrow-left" />{" "}
-              </button>
               {detailStatus === "image" ? (
                 <img src={detail} alt="tepid" />
               ) : (
                 <div className="texted-detail">{detail}</div>
               )}
-              <button
-                className="adjacent-post"
-                value="right"
-                onClick={this.changePost.bind(this, "right")}
-              >
-                {" "}
-                <i className="fas fa-arrow-right" />{" "}
-              </button>
+              <div>
+                <button
+                  className="adjacent-post"
+                  onClick={this.changePost.bind(this, "left")}
+                >
+                  {" "}
+                  <i className="fas fa-arrow-left" />{" "}
+                </button>
+                <button
+                  className="adjacent-post"
+                  value="right"
+                  onClick={this.changePost.bind(this, "right")}
+                >
+                  {" "}
+                  <i className="fas fa-arrow-right" />{" "}
+                </button>
+              </div>
             </div>
           </div>
         </div>

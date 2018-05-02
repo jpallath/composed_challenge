@@ -47,9 +47,11 @@
 .lightbox.active img {
   width: auto;
   height: 50vh;
+  max-height: 210px;
 }
 .user-activity {
   display: flex;
+  flex-direction: column;
 }
 .texted-detail {
   background: pink;
@@ -63,6 +65,7 @@
   color: white;
   font-size: 20px;
   background: transparent;
+  margin: 10px 20px;
 }
 
 .close-button {
